@@ -29,11 +29,12 @@ def on_click(x, y, button, pressed):
     print(pressed)
     if str(button) == "Button.right":
         button = "right"
-    send(str(x) + " " + str(y) + " " + 
 
     if str(button) == "Button.left":
-        button = "left"button + " " + str(pressed))
+        button = "left"
     
+    send(str(x) + " " + str(y) + " " + button + " " + str(pressed))
+
 with mouse.Listener(on_move = track_cursor,on_click = on_click) as hlhook:
     hlhook.join()
 
