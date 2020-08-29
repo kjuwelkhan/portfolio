@@ -19,7 +19,7 @@ except socket.error:
     print(f"\nError thrown is {socket.error} (socket creation)")
 
 try: 
-    serverip = "192.168.10.5"
+    serverip = #your chosen ip
 except socket.gaierror():
     print(f"\nError thrown is {socket.gaierror()} (GAI)")
     sys.exit()
