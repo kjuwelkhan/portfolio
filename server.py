@@ -1,12 +1,18 @@
 import socket
 import threading
-import sys 
 from pynput.mouse import Button, Controller
+#import ctypes
+import pyautogui
+import sys
+import time
+
+#ctypes.windll.shcore.SetProcessDpiAwareness(2)
 
 header = 8
 format = "utf-8"
 port = 3255
 mouse  = Controller()
+execute = True
 
 try: 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -14,7 +20,7 @@ except socket.error:
     print(f"\nError thrown is {socket.error} (socket creation)")
 
 try: 
-    serverip = socket.gethostbyname(socket.gethostname())
+    serverip = sock.gethostbyname(socket.gethostname())
 except socket.gaierror():
     print(f"\nError thrown is {socket.gaierror()} (GAI)")
     sys.exit()
@@ -30,15 +36,35 @@ def handle_client(conn, addr):
             message_length = int(message_length)
             message = conn.recv(message_length).decode(format)
             targets = message.split(' ')
-            if (len(targets[0]) == 2):
-                mouse.position(targets[0], targets[1])
-                mouse.press(targets[2])
-                mouse.release(targets[2])
-            elif (len(targets[0]) == 1):
-                mouse.position(targets[0], targets[1])
+            print(targets)
+            x = int(targets[0])
+            y = int(targets[1])
+            if (len(targets) == 4):
+                button = targets[2]
+
+                if button == "left": button = Button.left
+                elif button == "right": 
+                    button = Button.right
+                    break
+
+                pressed = bool(targets[3])
+                
+                if pressed == True: 
+                    mouse.press(button)
+                    execute == False
+                else:
+                    mouse.release(button)
+                    execute == True
+
+                mouse.position = (x,y)
+                
+
+            elif (len(targets) == 2 and execute == True):
+                mouse.position = (x,y)
             else: 
                 raise Exception("Non valid input given")
-            print(f"[{addr}] {message}")
+
+            
             if (message == "disconnect"):
                 break
         
